@@ -8,18 +8,40 @@
         #map-container {
             position: relative;
             width: 100%;
+            margin: 0 auto;
         }
-        #tooltip {
-            position: absolute;
-            background-color: white;
-            border: 1px solid black;
-            padding: 10px;
+        #modal {
             display: none;
-            pointer-events: none;
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            font-size: 14px;
-            transition: opacity 0.3s ease-in-out;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        #modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 5px;
+            position: relative;
+        }
+        #close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        #modal-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            margin-bottom: 20px;
         }
         .region-name {
             font-size: 12px;
@@ -1578,7 +1600,13 @@
                 </g>
         </svg>
     </div>
-    <div id="tooltip"></div>
+    <div id="modal">
+        <div id="modal-content">
+            <span id="close-button">&times;</span>
+            <img id="modal-image" src="" alt="Region Image">
+            <div id="modal-text"></div>
+        </div>
+    </div>
 </main>
 
 <footer>
@@ -1590,6 +1618,7 @@
         const regionInfo = {
             'makedonia': {
                 name: 'Κεντρική Μακεδονία',
+                image: 'makedonia.png',
                 prefectures: [
                     { name: 'Νομαρχία Θεσσαλονίκης', capital: 'Θεσσαλονίκη' },
                     { name: 'Νομαρχία Χαλκιδικής', capital: 'Πολύγυρος' },
@@ -1605,6 +1634,7 @@
             },
             'thessalia': {
                 name: 'Θεσσαλία',
+                image: 'thessalia.png',
                 prefectures: [
                     { name: 'Νομαρχία Καρδίτσας', capital: 'Καρδίτσα' },
                     { name: 'Νομαρχία Λάρισας', capital: 'Λάρισα' },
@@ -1617,6 +1647,7 @@
             },
             'sterea': {
                 name: 'Στερεά Ελλάδα',
+                image: 'sterea.png',
                 prefectures: [
                     { name: 'Νομαρχία Αθηνών', capital: 'Αθήνα' },
                     { name: 'Νομαρχία Ανατολικής Αττικής', capital: 'Παλλήνη' },
@@ -1634,6 +1665,7 @@
             },
             'ipeiros': {
                 name: 'Ήπειρος',
+                image: 'ipiros.png',
                 prefectures: [
                     { name: 'Νομαρχία Άρτας', capital: 'Άρτα' },
                     { name: 'Νομαρχία Ιωαννίνων', capital: 'Ιωάννινα' },
@@ -1646,6 +1678,7 @@
             },
             'peloponisos': {
                 name: 'Πελοπόννησος',
+                image: 'peloponisos.png',
                 prefectures: [
                     { name: 'Νομαρχία Αρκαδίας', capital: 'Τρίπολη' },
                     { name: 'Νομαρχία Αργολίδας', capital: 'Ναύπλιο' },
@@ -1659,6 +1692,7 @@
             },
             'thraki': {
                 name: 'Θράκη',
+                image: 'thraki.png',
                 prefectures: [
                     { name: 'Νομαρχία Έβρου', capital: 'Αλεξανδρούπολη' },
                     { name: 'Νομαρχία Ροδόπης', capital: 'Κομοτηνή' },
@@ -1670,6 +1704,7 @@
             },
             'kriti': {
                 name: 'Κρήτη',
+                image: 'kriti.png',
                 prefectures: [
                     { name: 'Νομαρχία Χανίων', capital: 'Χανιά' },
                     { name: 'Νομαρχία Ηρακλείου', capital: 'Ηράκλειο' },
@@ -1682,6 +1717,7 @@
             },
             'ionia': {
                 name: 'Ιόνια Νησιά',
+                image: 'ionia.png',
                 prefectures: [
                     { name: 'Νομαρχία Κέρκυρας', capital: 'Κέρκυρα' },
                     { name: 'Νομαρχία Κεφαλληνίας', capital: 'Αργοστόλι' },
@@ -1691,24 +1727,37 @@
                 rivers: ['Δεν υπάρχουν σημαντικοί ποταμοί'],
                 lakes: ['Λίμνη Κεφαλονιάς (Δραγασιά)'],
                 mountains: ['Αίνος (Κεφαλονιά)']
+            },
+            'aigaio': {
+                name: 'Νησιά Αιγαίου',
+                image: 'aigaio.png',
+                prefectures: [
+                    { name: 'Νομαρχία Χίου', capital: 'Χίος' },
+                    { name: 'Νομαρχία Λέσβου', capital: 'Μυτιλήνη' },
+                    { name: 'Νομαρχία Σάμου', capital: 'Σάμος' },
+                    { name: 'Νομαρχία Κυκλάδων', capital: 'Ερμούπολη' },
+                    { name: 'Νομαρχία Δωδεκανήσου', capital: 'Ρόδος' }
+                ],
+                rivers: ['Δεν υπάρχουν σημαντικοί ποταμοί'],
+                lakes: ['Δεν υπάρχουν σημαντικές λίμνες'],
+                mountains: ['Όρος Κερκετεύς (Σάμος)', 'Όρος Ατάβυρος (Ρόδος)']
             }
         };
 
         const svg = document.getElementById('Layer_1');
-        const tooltip = document.getElementById('tooltip');
-
-        if (!svg || !tooltip) {
-            console.error('Required elements not found');
-            return;
-        }
-
-        let tooltipTimeout;
+        const modal = document.getElementById('modal');
+        const modalImage = document.getElementById('modal-image');
+        const modalText = document.getElementById('modal-text');
+        const closeButton = document.getElementById('close-button');
 
         svg.addEventListener('click', (e) => {
             const region = e.target.closest('g');
             if (region) {
                 const info = regionInfo[region.id];
                 if (info) {
+                    modalImage.src = `assets/${info.image}`;
+                    modalImage.alt = `Εικόνα της περιοχής ${info.name}`;
+
                     let content = `<h3>${info.name}</h3>`;
                     content += `<h4>Νομαρχίες και Πρωτεύουσες:</h4><ul>`;
                     info.prefectures.forEach(prefecture => {
@@ -1719,39 +1768,19 @@
                     content += `<h4>Λίμνες:</h4><p>${info.lakes.join(', ')}</p>`;
                     content += `<h4>Βουνά:</h4><p>${info.mountains.join(', ')}</p>`;
 
-                    tooltip.innerHTML = content;
-                    tooltip.style.display = 'block';
-                    tooltip.style.opacity = '1';
-                    updateTooltipPosition(e);
-
-                    clearTimeout(tooltipTimeout);
-
-                    tooltipTimeout = setTimeout(() => {
-                        svg.addEventListener('mousemove', hideTooltip);
-                    }, 500);
+                    modalText.innerHTML = content;
+                    modal.style.display = 'block';
                 }
             }
         });
 
-        function updateTooltipPosition(e) {
-            const rect = svg.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            tooltip.style.left = `${x}px`;
-            tooltip.style.top = `${y}px`;
-        }
+        closeButton.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
 
-        function hideTooltip() {
-            tooltip.style.opacity = '0';
-            setTimeout(() => {
-                tooltip.style.display = 'none';
-            }, 300);
-            svg.removeEventListener('mousemove', hideTooltip);
-        }
-
-        document.addEventListener('click', (e) => {
-            if (!svg.contains(e.target)) {
-                hideTooltip();
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
             }
         });
     });
