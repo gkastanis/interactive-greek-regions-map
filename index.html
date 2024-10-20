@@ -1617,7 +1617,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const regionInfo = {
             'makedonia': {
-                name: 'Κεντρική Μακεδονία',
+                name: 'Μακεδονία',
                 image: 'makedonia.png',
                 prefectures: [
                     { name: 'Νομαρχία Θεσσαλονίκης', capital: 'Θεσσαλονίκη' },
@@ -1738,9 +1738,10 @@
                     { name: 'Νομαρχία Κυκλάδων', capital: 'Ερμούπολη' },
                     { name: 'Νομαρχία Δωδεκανήσου', capital: 'Ρόδος' }
                 ],
-                rivers: ['Δεν υπάρχουν σημαντικοί ποταμοί'],
-                lakes: ['Δεν υπάρχουν σημαντικές λίμνες'],
-                mountains: ['Όρος Κερκετεύς (Σάμος)', 'Όρος Ατάβυρος (Ρόδος)']
+                rivers: ['Σιανίτης (Ρόδος)', 'Άχλας (Άνδρος)', 'Λουτάνης (Ρόδος)'],
+                lakes: ['Γλυφάδα (Σάμος)', 'Αρμολίον (Χίος)', 'Αλυκή (Λήμνος)', 'Λίμνη φράγματος Ερεσού (Λέσβου)'],
+                mountains: ['Όρος Ατάβυρος (Ρόδος)', 'Όρος Κερκετεύς (Σάμος)', 'Όρος Καρβούνη (Σάμος)', 'Όρος Καλή Λίμνη(Κάρπαθος)', 'Όρος Πελίναιο (Χίος)'],
+                sightseeing: ['Πορτάρα (Νάξος)', 'Ηφαίστειο Σαντορίνης', 'Κάστρο Ιπποτων (Ρόδος)', 'Νησί της Δήλου']
             }
         };
 
@@ -1767,6 +1768,9 @@
                     content += `<h4>Ποταμοί:</h4><p>${info.rivers.join(', ')}</p>`;
                     content += `<h4>Λίμνες:</h4><p>${info.lakes.join(', ')}</p>`;
                     content += `<h4>Βουνά:</h4><p>${info.mountains.join(', ')}</p>`;
+                    if (info.sightseeing) {
+                        content += `<h4>Αξιοθέατα:</h4><p>${info.sightseeing.join(', ')}</p>`;
+                    }
 
                     modalText.innerHTML = content;
                     modal.style.display = 'block';
